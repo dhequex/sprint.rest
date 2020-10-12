@@ -26,10 +26,24 @@ describe("Pokemon API Server", () => {
     });
 
     it("It should only return N number of Pokemon", async () => {
-      const res = await request.get("/api/pokemon/5");
+      const res = await request.get("/api/pokemon").query({ limit: 5 });
       //res.should.have.status(200);
       res.body.should.have.lengthOf(5);
+      res[5].should.deep.equal("Charmeleon");
+    });
+
+    it("It should add a new Pokemon", async () => {
+      const res = await request.post("/api/pokemon/:Chikorita");
+      //res.should.have.status(200);
+      res.body.should.have.lengthOf(152);
       //res[5].should.deep.equal("Charmeleon");
+    });
+
+    it("It should add a Pokemon by ID", async () => {
+      const res = await request.get("/api/pokemon/5");
+      //res.should.have.status(200);
+      //res.body.should.have.lengthOf(5);
+      res.body.name.should.deep.equal("Charmeleon");
     });
   });
 });
