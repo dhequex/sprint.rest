@@ -25,11 +25,11 @@ describe("Pokemon API Server", () => {
       res.body.should.have.lengthOf(151);
     });
 
-    xit("It should only return N number of Pokemon", async () => {
-      const res = await request.get("/pokemon/5");
-      res.should.have.status(200);
-      res.should.have.lengthOf(5);
-      res[5].should.deep.equal("Charmeleon");
+    it("It should only return N number of Pokemon", async () => {
+      const res = await request.get("/api/pokemon/5");
+      //res.should.have.status(200);
+      res.body.should.have.lengthOf(5);
+      //res[5].should.deep.equal("Charmeleon");
     });
   });
 });
