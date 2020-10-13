@@ -167,9 +167,7 @@ const setupServer = () => {
 
   app.delete("/api/types/:type", (req, res) => {
     const typetoRemove = req.params.type;
-    console.log(typetoRemove);
     const result = pokeData.types.filter((type) => type !== typetoRemove);
-    //console.log(result);
     res.send(result);
   });
 
@@ -184,8 +182,29 @@ const setupServer = () => {
         }
       }
     }
-    console.log(result);
     res.send(result);
+  });
+
+  app.get("/api/attacks/", (req, res) => {
+    //console.log(req.query);
+    if (req.query === {}) {
+      res.send(pokeData.attacks);
+    } else if (req.query !== {}) {
+      let arrayOfAttacks = [];
+      const limit = req.query.limit;
+      for (let i = 0; i < limit; i++) {
+        arrayOfAttacks.push(pokeData.attacks.fast[i]);
+      }
+      res.send(arrayOfAttacks);
+    }
+  });
+
+  app.get("/api/attacks/fast", (req, res) => {
+    res.send(pokeData.attacks.fast);
+  });
+
+  app.get("/api/attacks/special", (req, res) => {
+    res.send(pokeData.attacks.special);
   });
 
   return app;

@@ -97,5 +97,30 @@ describe("Pokemon API Server", () => {
       const res = await request.get("/api/types/Grass/pokemon");
       res.body[0].name.should.deep.equal("Bulbasaur");
     });
+
+    it("It should return a list of all available ATTACKS", async () => {
+      const res = await request.get("/api/attacks");
+      res.body.should.deep.equal(pokeData.attacks);
+    });
+
+    it("It should return a list of attacks for limit n", async () => {
+      const res = await request.get("/api/attacks/?limit=5");
+      res.body[0].name.should.deep.equal("Tackle");
+    });
+
+    it("It should return a list of all fast attacks", async () => {
+      const res = await request.get("/api/attacks/fast");
+      res.body[0].name.should.deep.equal("Tackle");
+    });
+
+    it("It should return a list of all special attacks", async () => {
+      const res = await request.get("/api/attacks/special");
+      res.body[0].name.should.deep.equal("Power Whip");
+    });
+
+    it("It should return an attack", async () => {
+      const res = await request.get("/api/attacks/Tackle");
+      res.body[0].name.should.deep.equal("Power Whip");
+    });
   });
 });
