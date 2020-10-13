@@ -1,18 +1,18 @@
 const pokeData = require("./data");
 const express = require("express");
-const { all } = require("underscore");
+//const { all } = require("underscore");
 
 const setupServer = () => {
   const app = express();
   app.use(express.json());
 
   app.get("/api/pokemon/", (req, res) => {
-    if (req.query === {}) {
-      res.send(pokeData.pokemon);
-    } else {
+    if (req.query !== {}) {
       const limit = req.query.limit;
       const result = pokeData.pokemon.slice(0, limit);
       res.send(result);
+    } else {
+      res.send(pokeData.pokemon);
     }
   });
 
@@ -29,18 +29,24 @@ const setupServer = () => {
   });
 
   //get pokemon by id
-  app.get("/api/pokemon/:id", (req, res) => {
-    const searchPokemon = req.params;
-    searchPokemon.id = parseInt(searchPokemon.id);
-    let result;
-    for (const pokemon of pokeData.pokemon) {
-      if (parseInt(pokemon.id) === searchPokemon.id) {
-        result = pokemon;
+  app.get("/api/pokemon/:idOrName", (req, res) => {
+    const idOrName = req.params.idOrName;
+    let targetPokemon;
+    if (isNaN(Number(idOrName))) {
+      for (const pokemon of pokeData.pokemon) {
+        if (idOrName === pokemon.name) {
+          targetPokemon = pokemon;
+        }
       }
+      res.send(targetPokemon);
+    } else if (!isNaN(Number(idOrName))) {
+      for (const pokemon of pokeData.pokemon) {
+        if (Number(pokemon.id) === Number(idOrName)) {
+          targetPokemon = pokemon;
+        }
+      }
+      res.send(targetPokemon);
     }
-    //console.log(result);
-    //res.end();
-    res.send(result);
   });
 
   return app;

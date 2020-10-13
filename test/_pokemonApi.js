@@ -42,5 +42,10 @@ describe("Pokemon API Server", () => {
       const res = await request.get("/api/pokemon/006");
       res.body.name.should.deep.equal("Charizard");
     });
+
+    it("It should get a Pokemon by name", async () => {
+      const res = await request.get("/api/pokemon/Mew");
+      res.body.name.should.deep.equal("Mew");
+    });
   });
 });
