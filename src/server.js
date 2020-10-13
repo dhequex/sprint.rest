@@ -6,41 +6,40 @@ const setupServer = () => {
   const app = express();
   app.use(express.json());
 
-  app.get("/api/pokemon", (req, res) => {
-    res.send(pokeData.pokemon);
-    res.end();
-  });
-
-  //this is for returning n number of pokemon
   app.get("/api/pokemon/", (req, res) => {
-    const { limit } = req.query;
-    const result = pokeData.pokemon.slice(0, Number(limit));
-
-    console.log(result);
-    res.send(result);
-    res.end();
+    if (req.query === {}) {
+      res.send(pokeData.pokemon);
+    } else {
+      const limit = req.query.limit;
+      const result = pokeData.pokemon.slice(0, limit);
+      res.send(result);
+    }
   });
 
-  //this is for inserting a new pokemon
+  app.get("/api/pokemon/", (req, res) => {
+    res.sendStatus(200);
+  });
 
-  app.post("/api/pokemon/"),
-    (req, res) => {
-      const newPokemon = pokeData.pokemon[1];
-      console.log(newPokemon);
-      const allPokemon = pokeData.pokemon;
-      allPokemon.push(newPokemon);
-      res.send(allPokemon);
-    };
-  //this is for geting a new pokemon by id
+  app.post("/api/pokemon/:name", (req, res) => {
+    const newPokemon = req.params;
+    pokeData.pokemon.push(newPokemon);
+    //console.log(newPokemon);
+    //res.end();
+    res.send(pokeData.pokemon);
+  });
 
-  app.get("/api/pokemon/:n", (req, res) => {
-    const index = req.params.n;
-    let result = pokeData.pokemon[index - 1];
-    /* const result = [];
-    for (let i = 0; i < limit; i++) {
-     result.push(pokeData.pokemon[i]);
-    } */
-    console.log(result);
+  //get pokemon by id
+  app.get("/api/pokemon/:id", (req, res) => {
+    const searchPokemon = req.params;
+    searchPokemon.id = parseInt(searchPokemon.id);
+    let result;
+    for (const pokemon of pokeData.pokemon) {
+      if (parseInt(pokemon.id) === searchPokemon.id) {
+        result = pokemon;
+      }
+    }
+    //console.log(result);
+    //res.end();
     res.send(result);
   });
 
