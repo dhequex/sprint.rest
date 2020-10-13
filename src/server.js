@@ -1,5 +1,6 @@
 const pokeData = require("./data");
 const express = require("express");
+//const { result } = require("underscore");
 //const { all } = require("underscore");
 
 const setupServer = () => {
@@ -148,6 +149,20 @@ const setupServer = () => {
       }
       res.send(result);
     }
+  });
+  app.get("/api/types/", (req, res) => {
+    if (req.query !== {}) {
+      const limit = req.query.limit;
+      res.send(pokeData.types.slice(0, limit));
+    } else {
+      res.send(pokeData.types);
+    }
+  });
+
+  app.post("/api/types/:type", (req, res) => {
+    const newType = req.params;
+    pokeData.types.push(newType);
+    res.send(pokeData.types);
   });
 
   return app;

@@ -71,5 +71,20 @@ describe("Pokemon API Server", () => {
       const res = await request.get("/api/pokemon/002/evolutions/previous");
       res.body.should.have.lengthOf(1);
     });
+    it("It should return a list of all available types", async () => {
+      const res = await request.get("/api/types");
+      res.body.should.have.lengthOf(17);
+    });
+
+    it("It should return a list of only 5 types", async () => {
+      const res = await request.get("/api/types/?limit=5");
+      res.body.should.have.lengthOf(5);
+    });
+
+    it("It add a TYPE with POST", async () => {
+      const res = await request.post("/api/types/Snow");
+      res.body.should.have.lengthOf(18);
+      //res.body[18].should.deep.equal("Snow");
+    });
   });
 });
