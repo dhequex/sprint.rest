@@ -89,29 +89,61 @@ const setupServer = () => {
   });
 
   // get a pokemon's evolutions
-  app.get("/api/pokemon/:idOrName/:evolutions", (req, res) => {
+  app.get("/api/pokemon/:idOrName/evolutions", (req, res) => {
     let idOrName = req.params.idOrName;
     let result;
     if (isNaN(Number(idOrName))) {
       idOrName =
         idOrName.charAt(0).toUpperCase() + idOrName.slice(1).toLowerCase();
       for (const pokemon of pokeData.pokemon) {
-        if (idOrName === pokemon.name && pokemon.hasOwnProperty("evolutions")) {
+        if (idOrName === pokemon.name && pokemon.evolutions !== undefined) {
           result = pokemon.evolutions;
+        } else if (
+          idOrName === pokemon.name &&
+          pokemon.evolutions === undefined
+        ) {
+          result = [];
         }
       }
-      //console.log(result);
-      //res.end();
+
       res.send(result);
     } else if (!isNaN(Number(idOrName))) {
       for (const pokemon of pokeData.pokemon) {
         if (
           Number(pokemon.id) === Number(idOrName) &&
-          pokemon.hasOwnProperty(evolutions)
+          pokemon.evolutions !== undefined
         ) {
           result = pokemon.evolutions;
         } else {
           result = [];
+        }
+      }
+      res.send(result);
+    }
+  });
+
+  app.get("/api/pokemon/:idOrName/evolutions/previous", (req, res) => {
+    let idOrName = req.params.idOrName;
+    let result;
+    if (isNaN(Number(idOrName))) {
+      idOrName =
+        idOrName.charAt(0).toUpperCase() + idOrName.slice(1).toLowerCase();
+      for (const pokemon of pokeData.pokemon) {
+        if (
+          idOrName === pokemon.name &&
+          ["Previous evolution(s)"] !== undefined
+        ) {
+          result = pokemon["Previous evolution(s)"];
+        }
+      }
+      res.send(result);
+    } else if (!isNaN(Number(idOrName))) {
+      for (const pokemon of pokeData.pokemon) {
+        if (
+          Number(pokemon.id) === Number(idOrName) &&
+          pokemon["Previous evolution(s)"] !== undefined
+        ) {
+          result = pokemon["Previous evolution(s)"];
         }
       }
       res.send(result);

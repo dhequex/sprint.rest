@@ -63,5 +63,13 @@ describe("Pokemon API Server", () => {
       const res = await request.get("/api/pokemon/bulbasaur/evolutions");
       res.body.should.have.lengthOf(2);
     });
+    it("It should return an empty Array for a Pokemon with no Evolutions", async () => {
+      const res = await request.get("/api/pokemon/tauros/evolutions");
+      res.body.should.have.lengthOf(0);
+    });
+    it("It should return a Pokemon's previous Evolutions", async () => {
+      const res = await request.get("/api/pokemon/002/evolutions/previous");
+      res.body.should.have.lengthOf(1);
+    });
   });
 });
