@@ -207,6 +207,96 @@ const setupServer = () => {
     res.send(pokeData.attacks.special);
   });
 
+  app.get("/api/attacks/:attack", (req, res) => {
+    let targetAttack = req.params.attack;
+    let result;
+    for (const attack of pokeData.attacks.fast) {
+      if (attack.name === targetAttack) {
+        result = attack;
+      }
+    }
+    for (const attack of pokeData.attacks.special) {
+      if (attack.name === targetAttack) {
+        result = attack;
+      }
+    }
+    res.send(result);
+  });
+
+  // get pokemon by attack name
+  app.get("/api/attacks/:attack/pokemon", (req, res) => {
+    let targetAttack = req.params.attack;
+    let result = [];
+    for (const pokemon of pokeData.pokemon) {
+      if (pokemon.attacks !== undefined) {
+        for (const attack of pokemon.attacks.fast) {
+          if (attack.name === targetAttack) {
+            result.push({ id: pokemon.id, name: pokemon.name });
+          }
+        }
+        for (const attack of pokemon.attacks.special) {
+          if (attack.name === targetAttack) {
+            result.push({ id: pokemon.id, name: pokemon.name });
+          }
+        }
+      }
+    }
+    res.send(result);
+  });
+
+  app.post("/api/attacks/fast/:name", (req, res) => {
+    const newAttack = req.params;
+    pokeData.attacks.fast.push(newAttack);
+    res.sendStatus(200);
+  });
+
+  app.post("/api/attacks/special/:name", (req, res) => {
+    const newAttack = req.params;
+    pokeData.attacks.special.push(newAttack);
+    res.sendStatus(200);
+  });
+
+  app.patch("/api/attacks/:attack", (req, res) => {
+    const attackToModify = req.params.attack;
+    let modified = false;
+    for (const attack of pokeData.attacks.fast) {
+      if (attack.name === attackToModify) {
+        modified = true;
+      }
+    }
+    for (const attack of pokeData.attacks.special) {
+      if (attack.name === attackToModify) {
+        modified = true;
+      }
+    }
+
+    if (modified) res.sendStatus(200);
+    else res.sendStatus(404);
+  });
+
+  app.delete("/api/attacks/:attack", (req, res) => {
+    const attackToDelete = req.params.attack;
+    let index;
+    let deleted = false;
+    for (const attack of pokeData.attacks.fast) {
+      if (attack.name === attackToDelete) {
+        let index = pokeData.attacks.fast.indexOf(attack);
+        pokeData.attacks.fast.splice(index, 1);
+        deleted = true;
+      }
+    }
+    for (const attack of pokeData.attacks.special) {
+      if (attack.name === attackToDelete) {
+        let index = pokeData.attacks.special.indexOf(attack);
+        pokeData.attacks.special.splice(index, 1);
+        deleted = true;
+      }
+    }
+
+    if (deleted) res.sendStatus(200);
+    else res.sendStatus(404);
+  });
+
   return app;
 };
 

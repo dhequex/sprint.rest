@@ -119,8 +119,33 @@ describe("Pokemon API Server", () => {
     });
 
     it("It should return an attack", async () => {
-      const res = await request.get("/api/attacks/Tackle");
-      res.body[0].name.should.deep.equal("Power Whip");
+      const res = await request.get("/api/attacks/Ember");
+      res.body.name.should.deep.equal("Ember");
+    });
+
+    it("It should return pokemon with a certain attack", async () => {
+      const res = await request.get("/api/attacks/Ember/pokemon");
+      res.body[0].name.should.deep.equal("Charmander");
+    });
+
+    it("It should add a fast attack", async () => {
+      const res = await request.post("/api/attacks/fast/Squeal");
+      res.should.have.status(200);
+    });
+
+    it("It should add a special attack", async () => {
+      const res = await request.post("/api/attacks/special/Shout");
+      res.should.have.status(200);
+    });
+
+    it("It should modify an attack", async () => {
+      const res = await request.patch("/api/attacks/Thunder");
+      res.should.have.status(200);
+    });
+
+    it("It should delete an attack", async () => {
+      const res = await request.delete("/api/attacks/Thunder");
+      res.should.have.status(200);
     });
   });
 });
