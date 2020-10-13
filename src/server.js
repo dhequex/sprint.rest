@@ -1,6 +1,6 @@
 const pokeData = require("./data");
 const express = require("express");
-//const { result } = require("underscore");
+//const { _ } = require("underscore");
 //const { all } = require("underscore");
 
 const setupServer = () => {
@@ -160,9 +160,32 @@ const setupServer = () => {
   });
 
   app.post("/api/types/:type", (req, res) => {
-    const newType = req.params;
+    const newType = req.params.type;
     pokeData.types.push(newType);
     res.send(pokeData.types);
+  });
+
+  app.delete("/api/types/:type", (req, res) => {
+    const typetoRemove = req.params.type;
+    console.log(typetoRemove);
+    const result = pokeData.types.filter((type) => type !== typetoRemove);
+    //console.log(result);
+    res.send(result);
+  });
+
+  app.get("/api/types/:type/pokemon", (req, res) => {
+    const targetType = req.params.type;
+    const result = [];
+
+    for (const pokemon of pokeData.pokemon) {
+      if (pokemon.types !== undefined) {
+        if (pokemon.types.includes(targetType)) {
+          result.push({ id: pokemon.id, name: pokemon.name });
+        }
+      }
+    }
+    console.log(result);
+    res.send(result);
   });
 
   return app;

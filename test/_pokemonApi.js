@@ -54,9 +54,9 @@ describe("Pokemon API Server", () => {
     });
 
     it("It should be able to Delete a Pokemon", async () => {
-      const res = await request.delete("/api/pokemon/Pikachu");
+      const res = await request.delete("/api/pokemon/Chikorita");
       res.body.should.have.lengthOf(151);
-      res.body[150].name.should.deep.equal("Chikorita");
+      res.body[150].name.should.deep.equal("Mew");
     });
 
     it("It should be get a Pokemon's evolutions", async () => {
@@ -85,6 +85,17 @@ describe("Pokemon API Server", () => {
       const res = await request.post("/api/types/Snow");
       res.body.should.have.lengthOf(18);
       //res.body[18].should.deep.equal("Snow");
+    });
+
+    it("It should be able to Delete a TYPE", async () => {
+      const res = await request.delete("/api/types/Grass");
+      res.body.should.have.lengthOf(17);
+      //res.body[150].name.should.deep.equal("Chikorita");
+    });
+
+    it("It should be able to return All Pokemon of a given TYPE", async () => {
+      const res = await request.get("/api/types/Grass/pokemon");
+      res.body[0].name.should.deep.equal("Bulbasaur");
     });
   });
 });
