@@ -47,5 +47,21 @@ describe("Pokemon API Server", () => {
       const res = await request.get("/api/pokemon/mew");
       res.body.name.should.deep.equal("Mew");
     });
+
+    it("It should be able to Modify a Pokemon", async () => {
+      const res = await request.patch("/api/pokemon/Mewtwo");
+      res.body.name.should.deep.equal("Mewthree");
+    });
+
+    it("It should be able to Delete a Pokemon", async () => {
+      const res = await request.delete("/api/pokemon/Pikachu");
+      res.body.should.have.lengthOf(151);
+      res.body[150].name.should.deep.equal("Chikorita");
+    });
+
+    it("It should be get a Pokemon's evolutions", async () => {
+      const res = await request.get("/api/pokemon/bulbasaur/evolutions");
+      res.body.should.have.lengthOf(2);
+    });
   });
 });
