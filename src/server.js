@@ -30,9 +30,11 @@ const setupServer = () => {
 
   //get pokemon by id
   app.get("/api/pokemon/:idOrName", (req, res) => {
-    const idOrName = req.params.idOrName;
+    let idOrName = req.params.idOrName;
     let targetPokemon;
     if (isNaN(Number(idOrName))) {
+      idOrName =
+        idOrName.charAt(0).toUpperCase() + idOrName.slice(1).toLowerCase();
       for (const pokemon of pokeData.pokemon) {
         if (idOrName === pokemon.name) {
           targetPokemon = pokemon;

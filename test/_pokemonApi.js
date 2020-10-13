@@ -44,7 +44,7 @@ describe("Pokemon API Server", () => {
     });
 
     it("It should get a Pokemon by name", async () => {
-      const res = await request.get("/api/pokemon/Mew");
+      const res = await request.get("/api/pokemon/mew");
       res.body.name.should.deep.equal("Mew");
     });
   });
