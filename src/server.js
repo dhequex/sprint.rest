@@ -24,8 +24,6 @@ const setupServer = () => {
   app.post("/api/pokemon/:name", (req, res) => {
     const newPokemon = req.params;
     pokeData.pokemon.push(newPokemon);
-    //console.log(newPokemon);
-    //res.end();
     res.send(pokeData.pokemon);
   });
 
@@ -186,16 +184,17 @@ const setupServer = () => {
   });
 
   app.get("/api/attacks/", (req, res) => {
-    //console.log(req.query);
-    if (req.query === {}) {
-      res.send(pokeData.attacks);
-    } else if (req.query !== {}) {
-      let arrayOfAttacks = [];
-      const limit = req.query.limit;
-      for (let i = 0; i < limit; i++) {
-        arrayOfAttacks.push(pokeData.attacks.fast[i]);
-      }
-      res.send(arrayOfAttacks);
+    const attackArray = pokeData.attacks.fast.concat(pokeData.attacks.special);
+    if (!req.query.limit) {
+      res.send(attackArray);
+    } /*if (req.query !== {})*/ else {
+      res.send(attackArray.slice(0, req.query.limit));
+      //let arrayOfAttacks = [];
+      //const limit = req.query.limit;
+      //for (let i = 0; i < limit; i++) {
+      //arrayOfAttacks.push(pokeData.attacks.fast[i]);
+      //}
+      //res.send(attackArray);
     }
   });
 
@@ -208,7 +207,7 @@ const setupServer = () => {
   });
 
   app.get("/api/attacks/:attack", (req, res) => {
-    let targetAttack = req.params.attack;
+    const targetAttack = req.params.attack;
     let result;
     for (const attack of pokeData.attacks.fast) {
       if (attack.name === targetAttack) {
@@ -225,8 +224,8 @@ const setupServer = () => {
 
   // get pokemon by attack name
   app.get("/api/attacks/:attack/pokemon", (req, res) => {
-    let targetAttack = req.params.attack;
-    let result = [];
+    const targetAttack = req.params.attack;
+    const result = [];
     for (const pokemon of pokeData.pokemon) {
       if (pokemon.attacks !== undefined) {
         for (const attack of pokemon.attacks.fast) {
@@ -276,18 +275,17 @@ const setupServer = () => {
 
   app.delete("/api/attacks/:attack", (req, res) => {
     const attackToDelete = req.params.attack;
-    let index;
     let deleted = false;
     for (const attack of pokeData.attacks.fast) {
       if (attack.name === attackToDelete) {
-        let index = pokeData.attacks.fast.indexOf(attack);
+        const index = pokeData.attacks.fast.indexOf(attack);
         pokeData.attacks.fast.splice(index, 1);
         deleted = true;
       }
     }
     for (const attack of pokeData.attacks.special) {
       if (attack.name === attackToDelete) {
-        let index = pokeData.attacks.special.indexOf(attack);
+        const index = pokeData.attacks.special.indexOf(attack);
         pokeData.attacks.special.splice(index, 1);
         deleted = true;
       }
